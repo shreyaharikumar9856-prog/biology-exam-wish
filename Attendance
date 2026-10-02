@@ -1,1 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>LARÑOVA Attendance</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        margin: 0;
+        background: linear-gradient(135deg, #ffe6f3, #eee3ff);
+        color: #333;
+    }
+
+    header {
+        background: linear-gradient(135deg, #9b59b6, #e84393);
+        color: white;
+        text-align: center;
+        padding: 25px 15px;
+        border-radius: 0 0 25px 25px;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 28px;
+    }
+
+    header p {
+        margin: 8px 0 0;
+        opacity: 0.9;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 18px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ead7f5;
+        border-radius: 10px;
+        font-size: 16px;
+        margin-bottom: 12px;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: #b05ed1;
+    }
+
+    button {
+        border: none;
+        padding: 11px 15px;
+        border-radius: 10px;
+        font-size: 15px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .add-btn {
+        background: #9b59b6;
+        color: white;
+        width: 100%;
+    }
+
+    .all-btn {
+        background: #27ae60;
+        color: white;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .student {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px;
+        margin-bottom: 10px;
+        background: #faf5ff;
+        border-radius: 12px;
+        gap: 10px;
+    }
+
+    .student-name {
+        font-weight: bold;
+        flex: 1;
+    }
+
+    .status {
+        min-width: 80px;
+        color: white;
+    }
+
+    .present {
+        background: #27ae60;
+    }
+
+    .absent {
+        background: #e74c3c;
+    }
+
+    .remove {
+        background: #ddd;
+        color: #555;
+        padding: 8px 10px;
+    }
+
+    .summary {
+        display: flex;
+        justify-content: space-around;
+        text-align: center;
+    }
+
+    .summary-box {
+        padding: 10px;
+    }
+
+    .number {
+        font-size: 25px;
+        font-weight: bold;
+        color: #9b59b6;
+    }
+
+    .empty {
+        text-align: center;
+        color: #888;
+        padding: 15px;
+    }
+
+    @media (max-width: 450px) {
+        .student {
+            flex-wrap: wrap;
+        }
+
+        .status {
+            flex: 1;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📚 LARÑOVA</h1>
+    <p>Tuition Attendance Tracker</p>
+</header>
+
+<div class="container">
+
+    <!-- DATE -->
+    <div class="card">
+        <label>📅 Attendance Date</label>
+        <input type="date" id="date">
+    </div>
+
+    <!-- ADD STUDENT -->
+    <div class="card">
+        <label>👩‍🎓 Add Student</label>
+
+        <input
+            type="text"
+            id="studentName"
+            placeholder="Enter student's name"
+        >
+
+        <button class="add-btn" onclick="addStudent()">
+            ➕ Add Student
+        </button>
+    </div>
+
+    <!-- ATTENDANCE -->
+    <div class="card">
+        <h2>📝 Today's Attendance</h2>
+
+        <button class="all-btn" onclick="markAllPresent()">
+            ✅ Mark All Present
+        </button>
+
+        <div id="studentList"></div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="card">
+        <h2>📊 Today's Summary</h2>
+
+        <div class="summary">
+
+            <div class="summary-box">
+                <div class="number" id="total">0</div>
+                <div>Total</div>
+            </div>
+
+            <div class="summary-box">
+                <div class="number" id="present">0</div>
+                <div>Present</div>
+            </div>
+
+            <div class="summary-box">
+                <div class="number" id="absent">0</div>
+                <div>Absent</div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+let students = JSON.parse(localStorage.getItem("students")) || [];
+
+let attendance =
+    JSON.parse(localStorage.getItem("attendance")) || {};
+
+
+// Set today's date
+let today = new Date().toISOString().split("T")[0];
+
+document.getElementById("date").value = today;
+
+
+// Change date
+document.getElementById("date").addEventListener("change", function() {
+    displayStudents();
+});
+
+
+// Add student
+function addStudent() {
+
+    let input = document.getElementById("studentName");
+    let name = input.value.trim();
+
+    if (name === "") {
+        alert("Please enter a student name.");
+        return;
+    }
+
+    students.push(name);
+
+    localStorage.setItem(
+        "students",
+        JSON.stringify(students)
+    );
+
+    input.value = "";
+
+    displayStudents();
+}
+
+
+// Remove student
+function removeStudent(index) {
+
+    if (confirm("Remove this student?")) {
+
+        students.splice(index, 1);
+
+        localStorage.setItem(
+            "students",
+            JSON.stringify(students)
+        );
+
+        displayStudents();
+    }
+}
+
+
+// Change attendance
+function toggleAttendance(index) {
+
+    let date = document.getElementById("date").value;
+
+    if (!attendance[date]) {
+        attendance[date] = {};
+    }
+
+    let current =
+        attendance[date][index];
+
+    if (current === "Present") {
+        attendance[date][index] = "Absent";
+    } else {
+        attendance[date][index] = "Present";
+    }
+
+    localStorage.setItem(
+        "attendance",
+        JSON.stringify(attendance)
+    );
+
+    displayStudents();
+}
+
+
+// Mark everyone present
+function markAllPresent() {
+
+    let date = document.getElementById("date").value;
+
+    if (!attendance[date]) {
+        attendance[date] = {};
+    }
+
+    students.forEach(function(student, index) {
+        attendance[date][index] = "Present";
+    });
+
+    localStorage.setItem(
+        "attendance",
+        JSON.stringify(attendance)
+    );
+
+    displayStudents();
+}
+
+
+// Display students
+function displayStudents() {
+
+    let list =
+        document.getElementById("studentList");
+
+    let date =
+        document.getElementById("date").value;
+
+    list.innerHTML = "";
+
+    if (students.length === 0) {
+
+        list.innerHTML =
+            '<div class="empty">No students added yet 🌸</div>';
+
+        updateSummary();
+
+        return;
+    }
+
+    students.forEach(function(name, index) {
+
+        let status =
+            attendance[date] &&
+            attendance[date][index]
+            ? attendance[date][index]
+            : "Absent";
+
+        let studentDiv =
+            document.createElement("div");
+
+        studentDiv.className = "student";
+
+        studentDiv.innerHTML = `
+
+            <div class="student-name">
+                👤 ${name}
+            </div>
+
+            <button
+                class="status ${
+                    status === "Present"
+                    ? "present"
+                    : "absent"
+                }"
+                onclick="toggleAttendance(${index})"
+            >
+                ${
+                    status === "Present"
+                    ? "🟢 Present"
+                    : "🔴 Absent"
+                }
+            </button>
+
+            <button
+                class="remove"
+                onclick="removeStudent(${index})"
+            >
+                🗑️
+            </button>
+        `;
+
+        list.appendChild(studentDiv);
+
+    });
+
+    updateSummary();
+}
+
+
+// Update summary
+function updateSummary() {
+
+    let date =
+        document.getElementById("date").value;
+
+    let presentCount = 0;
+
+    students.forEach(function(student, index) {
+
+        if (
+            attendance[date] &&
+            attendance[date][index] === "Present"
+        ) {
+            presentCount++;
+        }
+
+    });
+
+    document.getElementById("total").innerText =
+        students.length;
+
+    document.getElementById("present").innerText =
+        presentCount;
+
+    document.getElementById("absent").innerText =
+        students.length - presentCount;
+}
+
+
+// Initial display
+displayStudents();
+
+</script>
+
+</body>
+</html>
