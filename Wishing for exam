@@ -1,1 +1,623 @@
-wishing for biology exam
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Biology Exam 💗🧬</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Trebuchet MS", sans-serif;
+    background: linear-gradient(135deg, #ffd6f6, #e5d4ff);
+    color: #652b72;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+h1 {
+    font-size: 38px;
+    margin-bottom: 15px;
+}
+
+h2 {
+    font-size: 27px;
+}
+
+.message {
+    font-size: 20px;
+    line-height: 1.6;
+}
+
+button {
+    border: none;
+    border-radius: 30px;
+    padding: 15px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px;
+    background: #a855f7;
+    color: white;
+    box-shadow: 0 5px 12px rgba(120, 50, 150, 0.3);
+}
+
+button:active {
+    transform: scale(0.9);
+}
+
+.hidden {
+    display: none;
+}
+
+/* BALLOONS */
+
+.balloon {
+    display: inline-block;
+    font-size: 65px;
+    margin: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.balloon:active {
+    transform: scale(1.4);
+}
+
+/* DRUM */
+
+.drum {
+    font-size: 110px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    user-select: none;
+}
+
+.drum:active {
+    transform: scale(0.8);
+}
+
+.drumHit {
+    animation: drumShake 0.18s;
+}
+
+@keyframes drumShake {
+
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(0.8) rotate(-6deg);
+    }
+
+    50% {
+        transform: scale(1.15) rotate(6deg);
+    }
+
+    75% {
+        transform: scale(0.9) rotate(-4deg);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+#boom {
+    font-size: 25px;
+    font-weight: bold;
+    min-height: 60px;
+}
+
+/* HEART */
+
+.heart {
+    font-size: 45px;
+    animation: heartbeat 1s infinite;
+}
+
+@keyframes heartbeat {
+
+    50% {
+        transform: scale(1.2);
+    }
+
+}
+
+/* FLOATING EMOJIS */
+
+.float {
+    position: fixed;
+    font-size: 25px;
+    animation: floatUp 6s linear infinite;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+@keyframes floatUp {
+
+    from {
+        bottom: -50px;
+    }
+
+    to {
+        bottom: 110%;
+    }
+
+}
+
+/* CONFETTI */
+
+.confetti {
+    position: fixed;
+    top: -30px;
+    font-size: 25px;
+    pointer-events: none;
+    animation: fall 4s linear forwards;
+}
+
+@keyframes fall {
+
+    to {
+        top: 110vh;
+        transform: rotate(720deg);
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- PAGE 1 -->
+
+<div class="container" id="page1">
+
+    <div class="heart">💗</div>
+
+    <h1>🧬 Biology Exam 🧬</h1>
+
+    <div class="message">
+
+        Someone has a very important mission today... 👀
+
+        <br><br>
+
+        <b>Are you ready?</b>
+
+    </div>
+
+    <button onclick="startGame()">
+
+        ✨ TAP TO ENTER ✨
+
+    </button>
+
+</div>
+
+
+
+<!-- PAGE 2 -->
+
+<div class="container hidden" id="page2">
+
+    <h1>🌸 ALL THE BEST! 🌸</h1>
+
+    <div class="message">
+
+        You've studied. 📚
+
+        <br>
+
+        You've prepared. 🧠
+
+        <br>
+
+        Now it's time to...
+
+    </div>
+
+    <h1>💜 GO AND SLAYYY! 💜</h1>
+
+    <div class="message">
+
+        🧬 Believe in yourself 🧬
+
+    </div>
+
+    <button onclick="showBalloons()">
+
+        🎈 CONTINUE 🎈
+
+    </button>
+
+</div>
+
+
+
+<!-- PAGE 3 -->
+
+<div class="container hidden" id="page3">
+
+    <h2>🎈 POP THE BALLOONS! 🎈</h2>
+
+    <p class="message">
+
+        Pop all 5 balloons for some exam luck! ✨
+
+    </p>
+
+    <div id="balloons">
+
+        <span class="balloon" onclick="popBalloon(this)">🎈</span>
+
+        <span class="balloon" onclick="popBalloon(this)">🎈</span>
+
+        <span class="balloon" onclick="popBalloon(this)">🎈</span>
+
+        <span class="balloon" onclick="popBalloon(this)">🎈</span>
+
+        <span class="balloon" onclick="popBalloon(this)">🎈</span>
+
+    </div>
+
+    <p id="popMessage"></p>
+
+</div>
+
+
+
+<!-- PAGE 4 -->
+
+<div class="container hidden" id="page4">
+
+    <h1>🥁 EXAM POWER DRUM 🥁</h1>
+
+    <p class="message">
+
+        Beat the drum 5 times
+
+        <br>
+
+        to activate your biology power! 💜
+
+    </p>
+
+    <div
+        class="drum"
+        id="drum"
+        onclick="beatDrum()">
+
+        🥁
+
+    </div>
+
+    <div id="boom">
+
+        Hits: 0 / 5
+
+    </div>
+
+</div>
+
+
+
+<!-- PAGE 5 -->
+
+<div class="container hidden" id="page5">
+
+    <div class="heart">💗</div>
+
+    <h1>🧬 YOU'VE GOT THIS! 🧬</h1>
+
+    <div class="message">
+
+        Don't panic. 🌸
+
+        <br>
+
+        Read every question carefully. 📖
+
+        <br>
+
+        Trust what you studied. 💜
+
+        <br><br>
+
+        <b>And remember...</b>
+
+    </div>
+
+    <h1>
+
+        🔥 GO AND SLAY THAT BIOLOGY EXAM! 🔥
+
+    </h1>
+
+    <div class="message">
+
+        ✨ Future Biology Superstar ✨
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* START */
+
+function startGame() {
+
+    document.getElementById("page1").classList.add("hidden");
+
+    document.getElementById("page2").classList.remove("hidden");
+
+    createFloatingEmoji();
+
+}
+
+
+
+/* BALLOON PAGE */
+
+function showBalloons() {
+
+    document.getElementById("page2").classList.add("hidden");
+
+    document.getElementById("page3").classList.remove("hidden");
+
+}
+
+
+
+/* BALLOON POP */
+
+let popped = 0;
+
+function popBalloon(balloon) {
+
+    balloon.innerHTML = "💥";
+
+    setTimeout(function() {
+
+        balloon.style.visibility = "hidden";
+
+    }, 200);
+
+    popped++;
+
+    if (popped === 5) {
+
+        document.getElementById("popMessage").innerHTML =
+        "🎉 AMAZING! BALLOON LUCK ACTIVATED! 🎉";
+
+        setTimeout(function() {
+
+            document.getElementById("page3").classList.add("hidden");
+
+            document.getElementById("page4").classList.remove("hidden");
+
+        }, 1500);
+
+    }
+
+}
+
+
+
+/* DRUM */
+
+let hits = 0;
+
+function beatDrum() {
+
+    /* DRUM ANIMATION */
+
+    const drum = document.getElementById("drum");
+
+    drum.classList.remove("drumHit");
+
+    void drum.offsetWidth;
+
+    drum.classList.add("drumHit");
+
+
+    /* CREATE DRUM SOUND */
+
+    const AudioContext =
+        window.AudioContext || window.webkitAudioContext;
+
+    if (AudioContext) {
+
+        const audioContext = new AudioContext();
+
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+
+        oscillator.type = "sine";
+
+        oscillator.frequency.setValueAtTime(
+            120,
+            audioContext.currentTime
+        );
+
+        oscillator.frequency.exponentialRampToValueAtTime(
+            45,
+            audioContext.currentTime + 0.25
+        );
+
+
+        gain.gain.setValueAtTime(
+            0.8,
+            audioContext.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.01,
+            audioContext.currentTime + 0.25
+        );
+
+
+        oscillator.connect(gain);
+
+        gain.connect(audioContext.destination);
+
+
+        oscillator.start();
+
+        oscillator.stop(
+            audioContext.currentTime + 0.25
+        );
+
+    }
+
+
+    /* COUNT HITS */
+
+    hits++;
+
+    document.getElementById("boom").innerHTML =
+        "🥁 BOOOOM! 💥<br>" +
+        "Hits: " + hits + " / 5";
+
+
+    /* FINISH */
+
+    if (hits === 5) {
+
+        setTimeout(function() {
+
+            document.getElementById("page4").classList.add("hidden");
+
+            document.getElementById("page5").classList.remove("hidden");
+
+            confetti();
+
+        }, 1000);
+
+    }
+
+}
+
+
+
+/* CONFETTI */
+
+function confetti() {
+
+    const emojis = [
+        "💗",
+        "💜",
+        "✨",
+        "🧬",
+        "🌸",
+        "🎉"
+    ];
+
+    for (let i = 0; i < 50; i++) {
+
+        let piece =
+            document.createElement("div");
+
+        piece.className = "confetti";
+
+        piece.innerHTML =
+            emojis[
+                Math.floor(
+                    Math.random() * emojis.length
+                )
+            ];
+
+        piece.style.left =
+            Math.random() * 100 + "vw";
+
+        piece.style.animationDuration =
+            (2 + Math.random() * 3) + "s";
+
+        document.body.appendChild(piece);
+
+
+        setTimeout(function() {
+
+            piece.remove();
+
+        }, 5000);
+
+    }
+
+}
+
+
+
+/* FLOATING BIOLOGY EMOJIS */
+
+function createFloatingEmoji() {
+
+    setInterval(function() {
+
+        let emoji =
+            document.createElement("div");
+
+        emoji.className = "float";
+
+        const emojis = [
+            "🧬",
+            "💜",
+            "💗",
+            "✨",
+            "🔬"
+        ];
+
+        emoji.innerHTML =
+            emojis[
+                Math.floor(
+                    Math.random() * emojis.length
+                )
+            ];
+
+        emoji.style.left =
+            Math.random() * 100 + "vw";
+
+        document.body.appendChild(emoji);
+
+
+        setTimeout(function() {
+
+            emoji.remove();
+
+        }, 6000);
+
+    }, 800);
+
+}
+
+</script>
+
+</body>
+</html>
